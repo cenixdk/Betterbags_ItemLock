@@ -153,13 +153,13 @@ events:RegisterMessage('bag/Rendered', function(_, bag)
 end)
 
 
--- 7. Tooltip hint — hooks OnShow so it fires regardless of how BetterBags populates the tooltip
+-- 7. Tooltip hint
 local addingHint = false
-GameTooltip:HookScript("OnShow", function(tooltip)
+
+local function AddLockHintToTooltip(tooltip)
     if addingHint then return end
     local owner = tooltip:GetOwner()
     if not owner then return end
-    -- owner is BetterBags' wrapper frame; the actual item button is owner.button
     local button = (owner.lockHooked and owner) or (owner.button and owner.button.lockHooked and owner.button)
     if not button then return end
     InitializeDB()
@@ -171,7 +171,13 @@ GameTooltip:HookScript("OnShow", function(tooltip)
     end
     tooltip:Show()
     addingHint = false
-end)
+end
+
+if GameTooltip.ProcessInfo then
+    hooksecurefunc(GameTooltip, "ProcessInfo", function(tooltip)
+        AddLockHintToTooltip(tooltip)
+    end)
+end
 
 -- 6. Disenchanting Prevention
 local deFrame = CreateFrame("Frame")
