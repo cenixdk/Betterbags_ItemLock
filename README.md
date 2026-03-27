@@ -1,10 +1,10 @@
 # BetterBags — Item Lock
 
-A plugin for [BetterBags](https://github.com/BetterBags/BetterBags) that lets you lock items in your bags to prevent accidentally selling them at a vendor.
+A plugin for [BetterBags](https://www.curseforge.com/wow/addons/better-bags) that lets you lock items in your bags to prevent accidentally selling them at a vendor.
 
 ## Requirements
 
-- [BetterBags](https://github.com/BetterBags/BetterBags)
+- [BetterBags](https://www.curseforge.com/wow/addons/better-bags)
 - World of Warcraft: Midnight (12.x)
 
 ## Features
@@ -29,7 +29,7 @@ A padlock icon appears in the top-left corner of any locked item. The item toolt
 
 1. Download and extract the addon folder
 2. Place `BetterBags_ItemLock` in `World of Warcraft/_retail_/Interface/AddOns/`
-3. Make sure [BetterBags](https://github.com/BetterBags/BetterBags) is also installed
+3. Make sure [BetterBags](https://www.curseforge.com/wow/addons/better-bags) is also installed
 4. Reload or launch the game
 
 ## Notes
