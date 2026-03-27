@@ -4,6 +4,7 @@ local events = BetterBags:GetModule('Events')
 
 local merchantProtectionActive = false
 local lastRenderedBag = nil
+local hoveredLockButton = nil
 
 -- 1. Initialize Database
 local function InitializeDB()
@@ -132,6 +133,9 @@ events:RegisterMessage('bag/Rendered', function(_, bag)
             icon:Hide()
         end
 
+        -- Always update key on button so the tooltip hook can read it
+        item.button.lockItemKey = key
+
         if not item.button.lockHooked then
             item.button:HookScript("OnMouseDown", function(self, button)
                 if IsAltKeyDown() and button == "LeftButton" then
@@ -139,22 +143,34 @@ events:RegisterMessage('bag/Rendered', function(_, bag)
                 end
             end)
             item.button:HookScript("OnEnter", function(self)
-                if GameTooltip:IsShown() then
-                    InitializeDB()
-                    local data = item:GetItemData()
-                    local key = GetItemKey(data)
-                    if BetterBags_LockedItems[key] then
-                        GameTooltip:AddLine("|cFFFFD700Alt+Click|r to unlock", 1, 1, 1)
-                    else
-                        GameTooltip:AddLine("|cFFFFD700Alt+Click|r to lock", 1, 1, 1)
-                    end
-                    GameTooltip:Show()
-                end
+                hoveredLockButton = self
             end)
+            item.button:HookScript("OnLeave", function() hoveredLockButton = nil end)
             item.button.lockHooked = true
         end
     end
     RefreshMerchantOverlays()
+end)
+
+
+-- 7. Tooltip hint — hooks OnShow so it fires regardless of how BetterBags populates the tooltip
+local addingHint = false
+GameTooltip:HookScript("OnShow", function(tooltip)
+    if addingHint then return end
+    local owner = tooltip:GetOwner()
+    if not owner then return end
+    -- owner is BetterBags' wrapper frame; the actual item button is owner.button
+    local button = (owner.lockHooked and owner) or (owner.button and owner.button.lockHooked and owner.button)
+    if not button then return end
+    InitializeDB()
+    addingHint = true
+    if BetterBags_LockedItems[button.lockItemKey] then
+        tooltip:AddLine("|cFFFFD700Alt+Click|r to unlock", 1, 1, 1)
+    else
+        tooltip:AddLine("|cFFFFD700Alt+Click|r to lock", 1, 1, 1)
+    end
+    tooltip:Show()
+    addingHint = false
 end)
 
 -- 6. Disenchanting Prevention
