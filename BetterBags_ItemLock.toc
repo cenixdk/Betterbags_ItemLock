@@ -1,0 +1,9 @@
+## Interface: 120001
+## Title: BetterBags - Item Lock
+## Notes: Allows you to lock items in BetterBags to prevent selling or disenchanting.
+## Author: CenixDK
+## Version: 1.0
+## RequiredDeps: BetterBags
+## SavedVariables: BetterBags_LockedItems
+
+BetterBags_ItemLock.lua
